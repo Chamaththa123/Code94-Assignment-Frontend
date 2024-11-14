@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate,useParams, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { searchProducts } from "../redux/productSlice";
 import {
@@ -15,7 +15,7 @@ export const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-
+  const { id } = useParams();
   // Dropdown ref
   const dropdownRef = useRef(null);
   const profileRef = useRef(null);
@@ -56,17 +56,18 @@ export const Header = () => {
     if (searchTerm.trim()) {
       dispatch(searchProducts(searchTerm));
       console.log("Search Term:", searchTerm);
+      dispatch(searchProducts(searchTerm));
       navigate("/search-results");
     }
   };
 
   const getHeaderText = () => {
     const path = location.pathname;
-    if (path === "/add-product") return ["PRODUCTS", "Add Product"];
+    if (path === "/add-product") return ["PRODUCTS", "Add new product"];
     if (path === "/") return ["PRODUCTS"];
-    if (path === "/edit-product") return ["PRODUCTS", "Edit Product"];
+    if (path === `/edit-product/${id}`) return ["PRODUCTS", "Edit Product"];
     if (path === "/favorite-product") return ["FAVOURITE PRODUCTS"];
-    if (path === "/search-results") return ["Search", "Results"];
+    if (path === "/search-results") return ["PRODUCTS"];
     return ["PRODUCTS", "All"];
   };
 
@@ -123,7 +124,8 @@ export const Header = () => {
         )}
       </div>
 
-      <div className="md:flex md:justify-between py-8">
+      {location.pathname !== "/add-product" && location.pathname !== `/edit-product/${id || ''}` && (
+        <div className="md:flex md:justify-between py-8">
         <div className="relative md:w-[35%] full">
           <input
             type="text"
@@ -155,6 +157,9 @@ export const Header = () => {
           </button>
         </div>
       </div>
+      )}
+
+      
     </section>
   );
 };

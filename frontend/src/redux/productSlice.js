@@ -46,7 +46,7 @@ export const searchProducts = createAsyncThunk('products/searchProducts', async 
   const response = await axiosClient.get('products/search', {
     params: { searchTerm },  // Send the search term as a query parameter
   });
-  return response.data;
+  return response.data ;
 });
 
 const productSlice = createSlice({
@@ -55,10 +55,15 @@ const productSlice = createSlice({
     items: [],
     filteredItems: [],  // Array to hold filtered products
     selectedProduct: null,
+    searchTerm: "",
     loading: false,
     error: null,
   },
-  reducers: {},
+  reducers: {
+    setSearchTerm(state, action) {
+      state.searchTerm = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       // Fetch products
@@ -123,4 +128,5 @@ const productSlice = createSlice({
   },
 });
 
+export const { setSearchTerm } = productSlice.actions;
 export default productSlice.reducer;
