@@ -393,3 +393,23 @@ body {
     box-shadow: none;
   }
 }
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* src/index.css */
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/src/assets/fonts/Satoshi-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/src/assets/fonts/Satoshi-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+}

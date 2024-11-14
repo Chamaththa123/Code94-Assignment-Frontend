@@ -1,19 +1,3 @@
-// utils.js
-export const uomOptions = [
-  {
-    value: 1,
-    label: "Kilogram (Kg)",
-  },
-  {
-    value: 2,
-    label: "Tonne (t)",
-  },
-  {
-    value: 3,
-    label: "Megatonne (Mt)",
-  },
-];
-
 export const tableHeaderStyles = {
   headCells: {
     style: {
