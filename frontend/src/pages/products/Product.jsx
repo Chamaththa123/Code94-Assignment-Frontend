@@ -5,12 +5,15 @@ import { tableHeaderStyles } from "../../utils/utils";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchProducts } from "../../redux/productSlice";
 import { useNavigate } from "react-router-dom";
+import { DeleteIcon, EditIcon, StarredIcon } from "../../utils/icons";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const Product = () => {
   const dispatch = useDispatch();
   const { items, loading, error } = useSelector((state) => state.products);
   const navigate = useNavigate();
-  
+
   const [favorites, setFavorites] = useState(
     JSON.parse(localStorage.getItem("favorites")) || []
   );
@@ -25,75 +28,94 @@ export const Product = () => {
     localStorage.setItem("favorites", JSON.stringify(favorites));
   }, [favorites]);
 
-  // Handle toggling favorites
+  // Handle toggling favorites and show toast notification
   const toggleFavorite = (productId) => {
-    setFavorites((prevFavorites) =>
-      prevFavorites.includes(productId)
+    setFavorites((prevFavorites) => {
+      const isFavorite = prevFavorites.includes(productId);
+      const updatedFavorites = isFavorite
         ? prevFavorites.filter((id) => id !== productId)
-        : [...prevFavorites, productId]
-    );
+        : [...prevFavorites, productId];
+
+      // Show toast notification
+      toast(isFavorite ? "Removed from favorites" : "Added to favorites", {
+        type: isFavorite ? "warning" : "success",
+      });
+
+      return updatedFavorites;
+    });
   };
 
   // Define table columns
-  const columns = useMemo(() => [
-    {
-      name: "SKU",
-      selector: (row) => row.sku,
-      minWidth: "200px",
-      sortable: true,
-    },
-    {
-      name: "IMAGE",
-      selector: (row) => {
-        const mainImage = row.images?.find((image) => image.isMain)?.path || "/default-image.jpg";
-        return (
-          <img
-            src={`http://localhost:3000/${mainImage}`}
-            alt={row.product_name}
-            style={{ width: "70px", height: "auto", objectFit: "cover", borderRadius: "5px" }}
-          />
-        );
+  const columns = useMemo(
+    () => [
+      {
+        name: "SKU",
+        selector: (row) => row.sku,
+        minWidth: "200px",
+        sortable: true,
       },
-      maxWidth: "auto",
-    },
-    {
-      name: "PRODUCT NAME",
-      selector: (row) => row.product_name,
-      minWidth: "200px",
-    },
-    {
-      name: "PRICE",
-      selector: (row) => row.price,
-      right: true,
-    },
-    {
-      name: "QUANTITY",
-      selector: (row) => row.quantity,
-      right: true,
-    },
-    {
-      name: "Favorite",
-      cell: (row) => (
-        <input
-          type="checkbox"
-          checked={favorites.includes(row._id)}
-          onChange={() => toggleFavorite(row._id)}
-        />
-      ),
-      center: true,
-    },
-    {
-      name: "Actions",
-      cell: (row) => (
-        <Tooltip content="Edit Product">
-          <button onClick={() => navigate(`/edit-product/${row._id}`)} className="text-blue-500">
-            Edit
-          </button>
-        </Tooltip>
-      ),
-      center: true,
-    },
-  ], [favorites, navigate]);
+      {
+        name: "IMAGE",
+        selector: (row) => {
+          const mainImage =
+            row.images?.find((image) => image.isMain)?.path ||
+            "/default-image.jpg";
+          return (
+            <img
+              src={`http://localhost:3000/${mainImage}`}
+              alt={row.product_name}
+              style={{
+                width: "70px",
+                height: "auto",
+                objectFit: "cover",
+                borderRadius: "5px",
+              }}
+            />
+          );
+        },
+        maxWidth: "auto",
+      },
+      {
+        name: "PRODUCT NAME",
+        selector: (row) => row.product_name,
+        minWidth: "200px",
+      },
+      {
+        name: "QUANTITY",
+        selector: (row) => row.quantity,
+        center: true,
+      },
+      {
+        name: "",
+        cell: (row) => (
+          <div className="flex gap-4">
+            <Tooltip content="Delete Product">
+              <button onClick={() => navigate(`/edit-product/${row._id}`)}>
+                <DeleteIcon />
+              </button>
+            </Tooltip>
+            <Tooltip content="Edit Product">
+              <button onClick={() => navigate(`/edit-product/${row._id}`)}>
+                <EditIcon />
+              </button>
+            </Tooltip>
+            <Tooltip content="Favorite Product">
+              <button
+                onClick={() => toggleFavorite(row._id)}
+                className="text-center"
+              >
+                <StarredIcon
+                  color={favorites.includes(row._id) ? "#001EB9" : "white"}
+                />
+              </button>
+            </Tooltip>
+          </div>
+        ),
+        center: true,
+      },
+    ],
+    [favorites, navigate]
+  );
 
   // Handle loading and error states
   if (loading) return <p>Loading...</p>;
@@ -101,9 +123,6 @@ export const Product = () => {
 
   return (
     <div className="mx-10">
-      <button onClick={() => navigate("/favorite-product")} className="mb-4">
-        View Favorite Products
-      </button>
       <DataTable
         columns={columns}
         data={items}
@@ -118,6 +137,7 @@ export const Product = () => {
         }}
         noDataComponent={<div className="text-center">No data available</div>}
       />
+      <ToastContainer />
     </div>
   );
 };

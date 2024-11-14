@@ -65,7 +65,7 @@ export const Header = () => {
     if (path === "/add-product") return ["PRODUCTS", "Add Product"];
     if (path === "/") return ["PRODUCTS"];
     if (path === "/edit-product") return ["PRODUCTS", "Edit Product"];
-    if (path === "/favorite-product") return ["Favourite", "Products"];
+    if (path === "/favorite-product") return ["FAVOURITE PRODUCTS"];
     if (path === "/search-results") return ["Search", "Results"];
     return ["PRODUCTS", "All"];
   };
@@ -151,7 +151,7 @@ export const Header = () => {
             onClick={() => navigate("/favorite-product")}
             className="font-satoshi bg-[#F7F7F7] border border-[#001EB9] rounded-lg font-bold w-[40px] h-[40px] flex items-center justify-center"
           >
-            <StarredIcon />
+            <StarredIcon color={'#001EB9'}/>
           </button>
         </div>
       </div>
