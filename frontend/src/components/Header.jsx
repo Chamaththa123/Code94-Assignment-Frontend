@@ -2,7 +2,12 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { searchProducts } from "../redux/productSlice";
-import { ArrowIcon, ProfileIcon, SearchIcon, StarredIcon } from "../utils/icons";
+import {
+  ArrowIcon,
+  ProfileIcon,
+  SearchIcon,
+  StarredIcon,
+} from "../utils/icons";
 
 export const Header = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -24,8 +29,8 @@ export const Header = () => {
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
-        dropdownRef.current && 
-        !dropdownRef.current.contains(event.target) && 
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target) &&
         !profileRef.current.contains(event.target)
       ) {
         setDropdownOpen(false); // Close dropdown if clicked outside
@@ -81,7 +86,11 @@ export const Header = () => {
     <section>
       <div className="flex justify-end gap-4 items-center relative">
         <div className="font-semibold">ADMIN</div>
-        <div onClick={handleProfileClick} ref={profileRef} className="cursor-pointer">
+        <div
+          onClick={handleProfileClick}
+          ref={profileRef}
+          className="cursor-pointer"
+        >
           <ProfileIcon />
         </div>
 
@@ -101,13 +110,13 @@ export const Header = () => {
       </div>
 
       <div className="flex items-center font-satoshi gap-2">
-        <div className="font-bold text-[26px] text-[#162427] leading-[48.6px] tracking-widest">
+        <div className="font-bold text-[26px] md:text-[36px] text-[#162427] leading-[48.6px] tracking-widest">
           {mainTitle}
         </div>
         {subTitle && (
           <>
             <ArrowIcon className="mx-2 w-6 h-6 text-[#162427]" />
-            <div className="font-bold text-[16px] text-[#001EB9] leading-[48.6px] tracking-wider">
+            <div className="font-bold text-[16px] md:text-[24px] text-[#001EB9] leading-[48.6px] tracking-wider">
               {subTitle}
             </div>
           </>
@@ -115,7 +124,7 @@ export const Header = () => {
       </div>
 
       <div className="md:flex md:justify-between py-8">
-        <div className="relative md:w-[450px] full">
+        <div className="relative md:w-[35%] full">
           <input
             type="text"
             className="bg-[#F7F7F7] w-full rounded-full px-5 md:py-[8px] py-[10px] text-[16px] border-none focus:outline-none focus:border-transparent"
@@ -125,7 +134,7 @@ export const Header = () => {
           />
           <button
             onClick={handleSearchClick}
-            className="absolute right-2 top-1/2 font-satoshi text-[15px] font-medium transform -translate-y-1/2 bg-[#001EB9] w-[100px] text-white rounded-full px-[10px] py-[3px] flex items-center justify-center space-x-2"
+            className="absolute right-[5px] top-1/2 font-satoshi text-[15px] font-medium transform -translate-y-1/2 bg-[#001EB9] w-[100px] text-white rounded-full px-[10px] py-[5px] flex items-center justify-center space-x-2"
           >
             <SearchIcon />
             <span>Search</span>
