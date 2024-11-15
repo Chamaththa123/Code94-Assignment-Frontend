@@ -30,33 +30,37 @@ export const ProductDetails = () => {
 
   return (
     <div className="md:flex mt-5 font-satoshi">
-      <div className="md:w-[50%] w-full px-5">
-        {selectedProduct?.images && selectedProduct.images.length > 0 ? (
-          <>
-            <div className="main-image mb-4">
+    <div className="md:w-[50%] w-full px-5">
+  {selectedProduct?.images && selectedProduct.images.length > 0 ? (
+    <>
+      <div className="main-image mb-4">
+        <img
+          src={selectedProduct.images.find((img) => img.isMain)?.path}
+          alt="Main product"
+          className="w-full h-auto object-cover rounded-md"
+        />
+      </div>
+      <div className="related-images">
+        <div className="sub-images grid grid-cols-3 gap-2">
+          {selectedProduct.images
+            .filter((img) => !img.isMain)
+            .map((img) => (
               <img
-                src={selectedProduct.images.find((img) => img.isMain)?.path}
-                alt="Main product"
+                key={img._id}
+                src={img.path}
+                alt="Product thumbnail"
                 className="w-full h-auto object-cover rounded-md"
               />
-            </div>
-            <div className="sub-images flex space-x-2">
-              {selectedProduct.images
-                .filter((img) => !img.isMain)
-                .map((img) => (
-                  <img
-                    key={img._id}
-                    src={img.path}
-                    alt="Product thumbnail"
-                    className="w-1/3 h-auto object-cover rounded-md"
-                  />
-                ))}
-            </div>
-          </>
-        ) : (
-          <p className="text-gray-500">No images available</p>
-        )}
+            ))}
+        </div>
       </div>
+    </>
+  ) : (
+    <p className="text-gray-500">No images available</p>
+  )}
+</div>
+
+
 
       <div className="md:w-[50%] w-full">
         <div className="font-medium text-[#001EB9] text-[16px]">

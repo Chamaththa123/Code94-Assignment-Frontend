@@ -203,12 +203,13 @@ export const ProductEdit = () => {
           A small description about the product
         </div>
         <textarea
-          name="productDescription"
-          value={productData.productDescription}
-          onChange={handleInputChange}
-          className="block w-full rounded-[5px] bg-[#F7F7F7] border-0 py-2.5 pl-3 text-gray-900 ring-1 ring-inset mt-2 ring-[#D0D5DD] placeholder:text-[#667085] placeholder:text-[14px] focus:ring-1 focus:ring-inset text-[14px]"
-          rows="4"
-        />
+  name="productDescription"
+  value={productData.productDescription}
+  onChange={(e) => handleInputChange("productDescription", e.target.value)}  
+  className="block w-full rounded-[5px] bg-[#F7F7F7] border-0 py-2.5 pl-3 text-gray-900 ring-1 ring-inset mt-2 ring-[#D0D5DD] placeholder:text-[#667085] placeholder:text-[14px] focus:ring-1 focus:ring-inset text-[14px]"
+  rows="4"
+/>
+
         {errors.productDescription && (
           <p className="pt-1 text-xs font-medium text-red-500 font-satoshi">
             {errors.productDescription}
