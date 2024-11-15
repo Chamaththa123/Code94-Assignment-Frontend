@@ -58,10 +58,17 @@ const productSlice = createSlice({
     searchTerm: "",
     loading: false,
     error: null,
+    successMessage: null,
   },
   reducers: {
     setSearchTerm(state, action) {
       state.searchTerm = action.payload;
+    },
+    setSuccessMessage: (state, action) => {
+      state.successMessage = action.payload;
+    },
+    clearSuccessMessage: (state) => {
+      state.successMessage = null;
     },
   },
   extraReducers: (builder) => {
@@ -96,6 +103,7 @@ const productSlice = createSlice({
 
       // Add a product
       .addCase(addProduct.fulfilled, (state, action) => {
+        state.successMessage = 'Product added successfully!';
         state.items.push(action.payload);
       })
 
@@ -106,6 +114,7 @@ const productSlice = createSlice({
 
       // Update a product
       .addCase(updateProduct.fulfilled, (state, action) => {
+        state.successMessage = 'Product edited successfully!';
         state.items = state.items.map((item) =>
           item._id === action.payload._id ? action.payload : item
         );
@@ -128,5 +137,6 @@ const productSlice = createSlice({
   },
 });
 
+export const { setSuccessMessage, clearSuccessMessage } = productSlice.actions;
 export const { setSearchTerm } = productSlice.actions;
 export default productSlice.reducer;

@@ -4,7 +4,7 @@ export const tableHeaderStyles = {
       font: "satoshi",
       fontWeight: "700",
       color: "#001EB9",
-      fontSize: "16px",
+      fontSize: "14px",
     },
   },
   cells: {
@@ -13,6 +13,7 @@ export const tableHeaderStyles = {
       fontWeight: "500",
       color: "#162427",
       fontSize: "14px",
+      padding: "20px 10px 20px 10px",
     },
   },
 };

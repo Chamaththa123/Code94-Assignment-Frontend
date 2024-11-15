@@ -6,6 +6,8 @@ import { AddProduct } from "../pages/products/AddProduct";
 import { ProductEdit } from "../pages/products/ProductEdit";
 import { FavoriteProducts } from "../pages/products/FavoriteProducts";
 import { SearchProducts } from "../pages/products/SearchProducts";
+import { SignIn } from "../pages/users/SignIn";
+import { ProductDetails } from "../pages/products/ProductDetails";
 
 const router = createBrowserRouter([
   {
@@ -15,19 +17,19 @@ const router = createBrowserRouter([
       { path: "/", element: <Product /> },
       { path: "/add-product", element: <AddProduct /> },
       { path: "/edit-product/:id", element: <ProductEdit /> },
+      { path: "/product-details/:id", element: <ProductDetails /> },
       { path: "/favorite-product", element: <FavoriteProducts /> },
       { path: "/search-results", element: <SearchProducts /> },
-
     ],
   },
   {
     path: "/",
     element: <GuestLayout />,
     children: [
-      // {
-      //   path: "/login",
-      //   element: <Login />,
-      // },
+      {
+        path: "/login",
+        element: <SignIn />,
+      },
     ],
   },
 ]);

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate,useParams, useLocation } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { searchProducts } from "../redux/productSlice";
 import {
@@ -8,24 +8,27 @@ import {
   SearchIcon,
   StarredIcon,
 } from "../utils/icons";
+import { logout } from "../redux/authSlice";
 
 export const Header = () => {
+  // Accessing user data from the Redux store
+  const { user } = useSelector((state) => state.auth);
+
+  // Redux dispatch for dispatching actions
+  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+
   const [searchTerm, setSearchTerm] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   const location = useLocation();
   const { id } = useParams();
-  // Dropdown ref
   const dropdownRef = useRef(null);
   const profileRef = useRef(null);
 
-  // Access products and filteredItems from Redux
-  const { filteredItems, loading, error } = useSelector(
-    (state) => state.products
-  );
+  const { filteredItems } = useSelector((state) => state.products);
 
-  // Close dropdown if clicked outside
+  // Effect to handle clicks outside the dropdown and close it if clicked outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -33,14 +36,11 @@ export const Header = () => {
         !dropdownRef.current.contains(event.target) &&
         !profileRef.current.contains(event.target)
       ) {
-        setDropdownOpen(false); // Close dropdown if clicked outside
+        setDropdownOpen(false);
       }
     };
 
-    // Add event listener
     document.addEventListener("click", handleClickOutside);
-
-    // Cleanup event listener on component unmount
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
@@ -52,20 +52,22 @@ export const Header = () => {
     }
   }, [filteredItems]);
 
+  // Handles the search button click
   const handleSearchClick = () => {
     if (searchTerm.trim()) {
       dispatch(searchProducts(searchTerm));
-      console.log("Search Term:", searchTerm);
       dispatch(searchProducts(searchTerm));
       navigate("/search-results");
     }
   };
 
+  // Function to get dynamic header text based on the current route
   const getHeaderText = () => {
     const path = location.pathname;
     if (path === "/add-product") return ["PRODUCTS", "Add new product"];
     if (path === "/") return ["PRODUCTS"];
     if (path === `/edit-product/${id}`) return ["PRODUCTS", "Edit Product"];
+    if (path === `/product-details/${id}`) return ["PRODUCTS", "Product Details"];
     if (path === "/favorite-product") return ["FAVOURITE PRODUCTS"];
     if (path === "/search-results") return ["PRODUCTS"];
     return ["PRODUCTS", "All"];
@@ -74,19 +76,19 @@ export const Header = () => {
   const [mainTitle, subTitle] = getHeaderText();
 
   const handleProfileClick = () => {
-    setDropdownOpen((prev) => !prev); // Toggle dropdown on profile icon click
+    setDropdownOpen((prev) => !prev);
   };
 
+  // Handles logout action
   const handleLogout = () => {
-    setDropdownOpen(false);
-    // Add logout logic here, like dispatching a logout action or redirecting to a login page
-    console.log("Logged out");
+    dispatch(logout());
+    navigate("/login");
   };
 
   return (
     <section>
       <div className="flex justify-end gap-4 items-center relative">
-        <div className="font-semibold">ADMIN</div>
+        <div className="font-semibold">{user}</div>
         <div
           onClick={handleProfileClick}
           ref={profileRef}
@@ -124,42 +126,41 @@ export const Header = () => {
         )}
       </div>
 
-      {location.pathname !== "/add-product" && location.pathname !== `/edit-product/${id || ''}` && (
-        <div className="md:flex md:justify-between py-8">
-        <div className="relative md:w-[35%] full">
-          <input
-            type="text"
-            className="bg-[#F7F7F7] w-full rounded-full px-5 md:py-[8px] py-[10px] text-[16px] border-none focus:outline-none focus:border-transparent"
-            placeholder="Search for products"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <button
-            onClick={handleSearchClick}
-            className="absolute right-[5px] top-1/2 font-satoshi text-[15px] font-medium transform -translate-y-1/2 bg-[#001EB9] w-[100px] text-white rounded-full px-[10px] py-[5px] flex items-center justify-center space-x-2"
-          >
-            <SearchIcon />
-            <span>Search</span>
-          </button>
-        </div>
-        <div className="flex justify-between gap-6 md:mt-0 mt-4">
-          <button
-            onClick={() => navigate("/add-product")}
-            className="font-satoshi bg-[#001EB9] text-[15px] rounded-lg text-[#F7F7F7] font-medium md:w-[160px] w-full py-1"
-          >
-            New Product
-          </button>
-          <button
-            onClick={() => navigate("/favorite-product")}
-            className="font-satoshi bg-[#F7F7F7] border border-[#001EB9] rounded-lg font-bold w-[40px] h-[40px] flex items-center justify-center"
-          >
-            <StarredIcon color={'#001EB9'}/>
-          </button>
-        </div>
-      </div>
-      )}
-
-      
+      {location.pathname !== "/add-product" &&
+        location.pathname !== `/edit-product/${id || ""}` && (
+          <div className="md:flex md:justify-between py-8">
+            <div className="relative md:w-[35%] full">
+              <input
+                type="text"
+                className="bg-[#F7F7F7] w-full rounded-full px-5 md:py-[8px] py-[10px] text-[16px] border-none focus:outline-none focus:border-transparent"
+                placeholder="Search for products"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <button
+                onClick={handleSearchClick}
+                className="absolute right-[5px] top-1/2 font-satoshi text-[15px] font-medium transform -translate-y-1/2 bg-[#001EB9] w-[100px] text-white rounded-full px-[10px] py-[5px] flex items-center justify-center space-x-2"
+              >
+                <SearchIcon />
+                <span>Search</span>
+              </button>
+            </div>
+            <div className="flex justify-between gap-6 md:mt-0 mt-4">
+              <button
+                onClick={() => navigate("/add-product")}
+                className="font-satoshi bg-[#001EB9] text-[15px] rounded-lg text-[#F7F7F7] font-medium md:w-[160px] w-full py-1"
+              >
+                New Product
+              </button>
+              <button
+                onClick={() => navigate("/favorite-product")}
+                className="font-satoshi bg-[#F7F7F7] border border-[#001EB9] rounded-lg font-bold w-[40px] h-[40px] flex items-center justify-center"
+              >
+                <StarredIcon color={"#001EB9"} />
+              </button>
+            </div>
+          </div>
+        )}
     </section>
   );
 };

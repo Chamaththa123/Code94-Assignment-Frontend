@@ -1,16 +1,16 @@
 export const FormInput = ({
-    name,
-    data,
-    inputName,
-    handleChange,
-    errors,
-    type,
-    placeholder,
-    disabled,
-  }) => {
-    return (
-      <div className="md:w-[100%] w-full ">
-        <div className="flex items-center gap-2">
+  name,
+  data,
+  inputName,
+  handleChange,
+  errors,
+  type,
+  placeholder,
+  disabled,
+}) => {
+  return (
+    <div className="md:w-[100%] w-full ">
+      <div className="flex items-center gap-2">
         <label className="flex-shrink-0 font-satoshi w-[25%] text-[14px] md:text-[16px] leading-[24px] font-medium text-[#162427]">
           {name}
         </label>
@@ -23,12 +23,12 @@ export const FormInput = ({
           placeholder={placeholder}
           disabled={disabled}
         />
-        </div>
-        {errors[inputName] && (
-          <p className="pt-1 text-xs font-medium text-red-500 font-satoshi">
-            {errors[inputName]}
-          </p>
-        )}
       </div>
-    );
-  };
+      {errors[inputName] && (
+        <p className="pt-1 text-xs font-medium text-red-500 font-satoshi">
+          {errors[inputName]}
+        </p>
+      )}
+    </div>
+  );
+};
